@@ -1,0 +1,340 @@
+\documentclass[11pt,notitlepage,openany,oneside]{book}
+\usepackage{fontspec}
+\newcommand{\ignore}[1]{}
+\setmonofont{JuliaMono}[
+%  extension=.ttf,
+  UprightFont=*-Regular,
+  BoldFont=*-Bold,
+  ItalicFont=*-RegularItalic,
+  BoldItalicFont=*-BoldItalic,
+]
+
+\RequirePackage[svgnames]{xcolor}
+\usepackage{listings}
+\usepackage{isabelle-listings}
+\makeatletter\lst@InputCatcodes
+\def\lst@DefEC{%
+ \lst@CCECUse \lst@ProcessLetter
+^^80^^81^^82^^83^^84^^85^^86^^87^^88^^89^^8a^^8b^^8c^^8d^^8e^^8f%  ^^90^^91^^92^^93^^94^^95^^96^^97^^98^^99^^9a^^9b^^9c^^9d^^9e^^9f%
+^^a0^^a1^^a2^^a3^^a4^^a5^^a6^^a7^^a8^^a9^^aa^^ab^^ac^^ad^^ae^^af%  ^^b0^^b1^^b2^^b3^^b4^^b5^^b6^^b7^^b8^^b9^^ba^^bb^^bc^^bd^^be^^bf%
+^^c0^^c1^^c2^^c3^^c4^^c5^^c6^^c7^^c8^^c9^^ca^^cb^^cc^^cd^^ce^^cf%  ^^d0^^d1^^d2^^d3^^d4^^d5^^d6^^d7^^d8^^d9^^da^^db^^dc^^dd^^de^^df%
+^^e0^^e1^^e2^^e3^^e4^^e5^^e6^^e7^^e8^^e9^^ea^^eb^^ec^^ed^^ee^^ef%  ^^f0^^f1^^f2^^f3^^f4^^f5^^f6^^f7^^f8^^f9^^fa^^fb^^fc^^fd^^fe^^ff%
+  %^^^^20ac% Euro, deleted because it was causing problems
+  ^^^^0153^^^^0152%  OE, and oe
+  ^^^^2013^^^^2014% typo-dashes
+  ^^^^2018^^^^2019^^^^201c^^^^201d% typo quotes
+% Abbrevs (deleted because they all appear in punctuation)
+% ZNotation (blackboard symbols removed, also punctuation, arrow, relation, and operator duplicates)
+^^^^266f^^^^2a1f%
+% Arrows
+^^^^2190^^^^27f5^^^^290e^^^^21e0^^^^2192^^^^27f6^^^^290f^^^^21e2^^^^21d0^^^^27f8^^^^21da%
+^^^^21d2^^^^27f9^^^^21db^^^^2194^^^^27f7^^^^21d4^^^^27fa^^^^21a6^^^^27fc^^^^2500^^^^2550%
+^^^^21a9^^^^21aa^^^^21bd^^^^21c1^^^^21bc^^^^21c0^^^^21cc^^^^219d^^^^21c3^^^^21c2^^^^21bf%
+^^^^2191^^^^21d1^^^^2193^^^^21d3^^^^2195^^^^21d5^^^^21a3^^^^2914^^^^2915^^^^21a0^^^^2900%
+^^^^2916^^^^21f8^^^^21fb%
+% Control
+^^^^2759^^^^21e9^^^^21e7%
+% Control Block
+^^^^21d8^^^^21d9^^^^21d7^^^^21d6%
+% Digit
+^^^^^^01d7ec^^^^^^01d7ed^^^^^^01d7ee^^^^^^01d7ef^^^^^^01d7f0^^^^^^01d7f1^^^^^^01d7f2%
+^^^^^^01d7f3^^^^^^01d7f4^^^^^^01d7f5^^^^00bc^^^^00bd^^^^00be%
+% Document (with previously defined control removed)
+^^^^2015^^^^2326^^^^2710^^^^21e4^^^^2508^^^^2509^^^^2501^^^^25aa^^^^25b8^^^^27a7%
+^^^^204b^^^^25a9^^^^2b1a^^^^2217%
+%Greek
+^^^^03b1^^^^03b2^^^^03b3^^^^03b4^^^^03b5^^^^03b6^^^^03b7^^^^03b8^^^^03b9^^^^03ba%
+^^^^03bb^^^^03bc^^^^03bd^^^^03be^^^^03c0^^^^03c1^^^^03c3^^^^03c4^^^^03c5^^^^03c6%
+^^^^03c7^^^^03c8^^^^03c9^^^^0393^^^^0394^^^^0398^^^^039b^^^^039e^^^^03a0^^^^03a3%
+^^^^03a5^^^^03a6^^^^03a8^^^^03a9%
+%Icon
+^^^^^^01f5cf^^^^^^01f5c0^^^^^^01f310^^^^^^01f4d3^^^^261b%
+% Letters:
+% Calligraphic
+^^^^^^01d49c^^^^212c^^^^^^01d49e^^^^^^01d49f^^^^2130^^^^2131^^^^^^01d4a2^^^^210b%
+^^^^2110^^^^^^01d4a5^^^^^^01d4a6^^^^2112^^^^2133^^^^^^01d4a9^^^^^^01d4aa^^^^^^01d4ab%
+^^^^^^01d4ac^^^^211b^^^^^^01d4ae^^^^^^01d4af^^^^^^01d4b0^^^^^^01d4b1^^^^^^01d4b2%
+^^^^^^01d4b3^^^^^^01d4b4^^^^^^01d4b5%
+%Roman
+^^^^^^01d5ba^^^^^^01d5bb^^^^^^01d5bc^^^^^^01d5bd^^^^^^01d5be^^^^^^01d5bf^^^^^^01d5c0%
+^^^^^^01d5c1^^^^^^01d5c2^^^^^^01d5c3^^^^^^01d5c4^^^^^^01d5c5^^^^^^01d5c6^^^^^^01d5c7%
+^^^^^^01d5c8^^^^^^01d5c9^^^^^^01d5ca^^^^^^01d5cb^^^^^^01d5cc^^^^^^01d5cd^^^^^^01d5ce%
+^^^^^^01d5cf^^^^^^01d5d0^^^^^^01d5d1^^^^^^01d5d2^^^^^^01d5d3%
+%Fraktur UC
+^^^^^^01d504^^^^^^01d505^^^^212d^^^^^^01d507^^^^^^01d508^^^^^^01d509^^^^^^01d50a%
+^^^^210c^^^^2111^^^^^^01d50d^^^^^^01d50e^^^^^^01d50f^^^^^^01d510^^^^^^01d511%
+^^^^^^01d512^^^^^^01d513^^^^^^01d514^^^^211c^^^^^^01d516^^^^^^01d517^^^^^^01d518%
+^^^^^^01d519^^^^^^01d51a^^^^^^01d51b^^^^^^01d51c^^^^2128%
+%Frakture LC
+^^^^^^01d51e^^^^^^01d51f^^^^^^01d520^^^^^^01d521^^^^^^01d522^^^^^^01d523%
+^^^^^^01d524^^^^^^01d525^^^^^^01d526^^^^^^01d527^^^^^^01d528^^^^^^01d529%
+^^^^^^01d52a^^^^^^01d52b^^^^^^01d52c^^^^^^01d52d^^^^^^01d52e^^^^^^01d52f%
+^^^^^^01d530^^^^^^01d531^^^^^^01d532^^^^^^01d533^^^^^^01d534^^^^^^01d535%
+^^^^^^01d536^^^^^^01d537%
+%Blackboard
+^^^^^^01d538^^^^^^01d539^^^^2102^^^^^^01d53b^^^^^^01d53c^^^^^^01d53d^^^^^^01d53e%
+^^^^210d^^^^^^01d540^^^^^^01d541^^^^^^01d542^^^^^^01d543^^^^^^01d544^^^^2115%
+^^^^^^01d546^^^^2119^^^^211a^^^^211d^^^^^^01d54a^^^^^^01d54b^^^^^^01d54c%
+^^^^^^01d54d^^^^^^01d54e^^^^^^01d54f^^^^^^01d550^^^^2124%
+% Logic
+^^^^22a5^^^^22a4^^^^2227^^^^22c0^^^^2228^^^^22c1^^^^2200^^^^2203^^^^2204^^^^00ac%
+^^^^25cb^^^^25a1^^^^25c7%
+% Operator
+^^^^21be^^^^22c4^^^^2229^^^^22c2^^^^222a^^^^22c3^^^^2294^^^^2a06^^^^2293^^^^2a05%
+^^^^2216^^^^221d^^^^228e^^^^2a04^^^^00b1^^^^2213^^^^00d7^^^^00f7^^^^22c5^^^^22c6%
+^^^^2219^^^^2218^^^^2295^^^^2a01^^^^2297^^^^2a02^^^^2299^^^^2a00^^^^2296^^^^2298%
+^^^^2211^^^^220f^^^^2210^^^^222b^^^^222e^^^^00af^^^^2a3f^^^^2127^^^^291c^^^^2aa2%
+^^^^2a21^^^^29f9^^^^2040%
+% Punctuation
+^^^^2237^^^^27e8^^^^27e9^^^^27ea^^^^27eb^^^^2308^^^^2309^^^^230a^^^^230b^^^^2987%
+^^^^2988^^^^27e6^^^^27e7^^^^2983^^^^2984^^^^2989^^^^298a^^^^00ab^^^^00bb^^^^00a6%
+^^^^2aff^^^^2026^^^^22ef^^^^2010^^^^00b7^^^^2a3e^^^^2981^^^^2032^^^^2039^^^^203a%
+% Relation
+^^^^22a2^^^^22a8^^^^22a9^^^^22ab^^^^22a3^^^^221a^^^^2264^^^^2265^^^^226a^^^^226b%
+^^^^2272^^^^2273^^^^2a85^^^^2a86^^^^2208^^^^2209^^^^2282^^^^2283^^^^2286^^^^2287%
+^^^^228f^^^^2290^^^^2291^^^^2292^^^^2260^^^^223c^^^^2250^^^^2243^^^^2248^^^^224d%
+^^^^2245^^^^2323^^^^2261^^^^2322^^^^227a^^^^227b^^^^227c^^^^227d^^^^2225^^^^2016%
+^^^^2af4^^^^2afd^^^^22b2^^^^22b3^^^^22b4^^^^22b5^^^^25c3^^^^25b9^^^^25b3^^^^225c%
+^^^^2240^^^^25c1^^^^2a64^^^^25b7^^^^2a65^^^^2982^^^^22ff%
+% Unsorted (Euro deleted because previously defined)
+^^^^22c8^^^^2a1d^^^^2020^^^^2021^^^^221e^^^^2663^^^^2662^^^^2661^^^^2660^^^^2135%
+^^^^2205^^^^2207^^^^2202^^^^266d^^^^266e^^^^2220^^^^00a9^^^^00ae^^^^00aa^^^^00ba%
+^^^^00a7^^^^00b6^^^^00a1^^^^00bf^^^^00a3^^^^00a5^^^^00a2^^^^00a4^^^^00b0%
+^^^^25ca^^^^2118^^^^00b4^^^^0131^^^^00a8^^^^00b8^^^^02dd^^^^03f5^^^^2311^^^^23ce%
+^^^^2713^^^^2717^^^^2302^^^^2756%
+% Search
+^^00}
+\lst@RestoreCatcodes\makeatother
+
+\begin{document}
+
+\chapter{What you get}
+This project defines a language for the LaTeX `listings' package that allows 
+you to include Isabelle source code in your document, with all the funny symbols
+that Isabelle uses, and have it look much like it does in Isabelle's jedit window.
+In particular, you should be able to cut-and-paste from Isabelle to your LaTeX
+document and have things almost perfectly show up. Here's an example input:
+
+\begin{verbatim}
+\begin{lstlisting}
+lemma times_assoc:
+fixes a::nat and b and c
+shows "P ≠ Q"
+and "P ≠ l"
+and "l∩ m = m"
+and "∀P. P≤ P"
+and "S ⟶ T"
+and "⟦U⟧ ⟹ V" and "ℝ ≠ ℕ"
+sorry
+end
+\end{lstlisting}
+\end{verbatim}
+\noindent
+and the corresponding result:
+
+\lstset{language=Isabelle,basicstyle=\ttfamily}
+\begin{lstlisting}
+lemma times_assoc:
+fixes a::nat and b and c
+shows "P ≠ Q"
+and "P ≠ l"
+and "l∩ m = m"
+and "∀P. P≤ P"
+and "S ⟶ T"
+and "⟦U⟧ ⟹ V" and "ℝ ≠ ℕ"
+sorry
+end
+\end{lstlisting}
+
+And here's a list of all the characters that this language definition knows about, 
+roughly corresponding to the various sections presented in the `Symbols' tab of
+the jEdit interface, although if a symbol appears in two tabs, it only appears
+once here, so that (for instance) the `Z notation' section has only a few symbols. 
+
+\begin{lstlisting}
+
+Digits
+
+𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵¼½¾𝟬𝟭𝟮𝟯
+
+Abbrevs
+
+›
+‹
+
+ZNotation
+
+♯⨟
+
+Arrows
+
+←⟵⤎⇠→⟶
+
+⤏⇢⇐⟸
+
+⇚⇒⟹⇛↔⟷⇔⟺↦⟼
+
+─═↩↪↽⇁↼⇀⇌↝
+
+⇃⇂↿↑⇑↓⇓↕⇕
+
+↣⤔⤕↠⤀⤖⇸⇻
+
+Control
+
+❙⇩⇧
+
+Control Block
+
+⇘⇙⇗⇖
+
+
+Document
+
+―⌦✐⇤┈┉━▪▸➧⁋▩⬚∗❙
+
+Greek
+
+αβγδεζηθικλμνξπρστυφχψωΓΔΘΛΞΠΣΥΦΨΩ
+
+Icon
+
+🗏🗀🌐📓☛
+
+Letter
+
+𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ
+𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵
+
+𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆
+𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓
+
+𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐
+𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ
+
+𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪
+𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷
+
+𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄
+ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ
+
+Logic
+
+⊥⊤∧⋀∨⋁∀∃∄¬○□◇
+
+Operator
+
+↾⋄∩⋂∪⋃⊔⨆⊓⨅∖∝⊎⨄±∓×÷⋅⋆∙∘⊕⨁⊗⨂⊙⨀⊖⊘∑∏∐∫∮¯⨿℧⤜⪢⨡⧹⁀
+
+Punctuation
+
+∷⟨⟩⟪⟫⌈⌉⌊⌋⦇⦈⟦⟧⦃⦄⦉⦊«»¦⫿…⋯‐·⨾⦁′‹›
+
+Relation
+
+⊢⊨⊩⊫⊣√≤≥≪≫≲≳⪅⪆∈∉
+
+⊂⊃⊆⊇⊏⊐⊑⊒≠∼≐≃≈≍≅⌣≡
+
+⌢≺≻≼≽∥‖⫴⫽⊲⊳⊴⊵◃▹△≜
+
+≀◁⩤▷⩥⦂⋿
+
+Unsorted
+
+⋈⨝†‡∞♣♢♡♠ℵ∅∇∂♭♮∠©
+
+®ªº§¶¡¿£¥¢¤°◊℘´ı
+
+¨¸˝ϵ⌑⏎✓✗⌂❖
+
+End
+\end{lstlisting}
+
+\noindent 
+The language definition has some limitations, discussed below. 
+
+\section{Credit}
+This version of isabelle-listings was produced by John Hughes, but about 90 percent of it comes
+from the work of Jens Christoph Buerger, whose efforts I appreciate a great deal. 
+Much credit also goes to various helpful folks on tex.stackexchange.com who helped 
+me understand just enough about the challenges of dealing with character codes to 
+get to the point where all this works. 
+
+\section{Using this language definition}
+As in the example above, you merely open a listing, paste in stuff from the
+Isabelle/jEdit window, and close the listing.
+
+\subsection{Not the way to do it!}
+For most uses of Isabelle, this is the \textbf{wrong} way to produce source-code
+listings. The \textbf{right} way is to insert some magic instructions into the 
+source code, use Isabelle's own build system to produce a LaTeX file, and then 
+include `snippets' from that file into whatever document you're producing. 
+This is documented in the Isabelle build system manual, although as of a few 
+months ago the `comment' style shown there is no longer in use, and there are a 
+couple of typos -- excess backslashes -- that make things fail. 
+
+That system seems complex --- it is! --- but it has the advantage that as your 
+source code changes, so does your document. It has the disadvantage that by 
+default it won't want to produce output for theories with errors in them, or may 
+(depending on option-settings) suppress things with `sorry' in them. If you're 
+trying (as I am) to guide beginning users in the use of Isabelle, and want to 
+demonstrate something being done wrong (and its correction!), this is actually 
+somewhat annoying. And if you're writing a paper comparing multiple proof 
+systems, having the Isabelle build-system in the middle of your document 
+may be an annoyance rather than an aid. 
+
+The other disadvantage is that the LaTeX generated by the Isabelle build 
+system isn't particularly readable: many characters are replaced by a LaTeX 
+macro like \verb|\isasymW| for a "mathcal" letter W, etc. The meanings of 
+these macros is defined in a style file, and that results in a 
+beautifully-formatted result, but hard-to-read LaTeX input. Of course, the 
+notion is that you shouldn't be messing with that input at all once Isabelle 
+produces it, but that's not how the document-preparation cycle always 
+progresses for me. 
+
+\section{Limitations}
+This project has several limitations.
+\begin{itemize}
+    
+\item  This project was developed using Isabelle2024 in early 2025. Isabelle 
+ will no doubt gradually add more symbols, and this will become obsolete. 
+
+\item There are some symbols that cannot be used because they will appear as 
+odd blocks in the output rather than as the symbol you wanted. The font I've 
+chosen to use (Julia) seems very well provisioned. If you try to shift to 
+a different font, you may find that some symbols are not available. 
+
+\item For reasons I don't understand, the Euro symbol (€) causes problems.
+
+\item Using this language-definition requires using LuaLaTeX or XeTeX (although 
+I haven't tested it there) rather than pdfLaTeX.
+
+\item Using this language definition requires changing the input-characters 
+allowed in your document. Many if not most of the unusual characters used in the jedit 
+window have character codes outside of the normal range traditionally allowed by LaTeX. Some
+are in the range range 1000-2000, which may not be supported by all editors.
+
+\item As a particular example, Overleaf's current editor cannot handle many 
+of these characters, so this language definition won't work there.
+
+\item Many characters in Isabelle's own style-definition require shifting 
+vertically to look good. Almost all the arrows, for instance, are shifted 
+somewhat. This language-definition does none of that.
+
+\item Isabelle uses arrows with many different lengths; this font does a 
+bad job distinguishing among those. 
+
+\item This language-definition is unsupported. I need it for a particular
+project, but do not anticipate maintaining it in the future.
+
+\item The failure of the `listing` package to properly handle unicode without
+the whole `\verb|lst@DefEC|' thing appears to be a bug. If the author of
+`listings' fixes that bug, this language definition can be considerably 
+simplified. I may actually do so if that fix is made. 
+
+\end{itemize}
+
+
+
+\end{document}
